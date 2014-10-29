@@ -12,7 +12,7 @@ Stock::Stock()        // default constructor
     total_val = 0.0;
 }
 
-Stock::Stock(const std::string & co, long n, double pr)
+ Stock::Stock(const std::string & co, long n, double pr)
 {
     std::cout << "Constructor using " << co << " called\n";
     company = co;
