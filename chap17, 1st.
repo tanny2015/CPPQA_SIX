@@ -1,0 +1,16 @@
+#include <iostream>
+#include<string>
+using namespace std;
+int main()
+{
+  string a;
+  int count_a=0;
+  cout<<"enter some strings: ";
+  getline(cin, a);
+  int position=a.find('$',0);
+  for(int i=0;i<position;i++)
+  {
+    count_a++;
+  }
+  cout<<"now we have "<<count_a<<" words before $! "<<endl;
+}
