@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib>
+#include <algorithm>
+#include <memory>
+#include <iterator>
+#include <ctime>
+#include <list>
+using namespace std;
+
+void out(string &a){cout<< a<<" ";}
+    typedef list<string> type;
+    void put_in_and_sort_and_print(type & a);
+    int main()
+    {
+        type Mat_friend;
+        type Pat_friend;
+        cout<<"hi Mat! ";
+        put_in_and_sort_and_print(Mat_friend);
+        cout<<endl<<"hi Pat! ";
+        put_in_and_sort_and_print(Pat_friend);
+        Mat_friend.merge(Pat_friend);
+        Mat_friend.unique();
+        cout<<"以下是融合后的list--已经去掉重复值"<<endl;
+        for_each(Mat_friend.begin(),Mat_friend.end(),out);
+    }
+    void put_in_and_sort_and_print(type & a)//输入+排序+输出
+    {
+        string temp;
+        cout<<"please enter your friends' names,'q' to quit!"<<endl;
+        cin>>temp;
+        while (cin && temp!="q")
+        {
+            a.insert(a.begin(),temp);
+            cin>>temp;
+            
+        }
+        a.sort();
+        cout<<"this is the namelist: ";
+        for_each(a.begin(),a.end(),out);
+    }
