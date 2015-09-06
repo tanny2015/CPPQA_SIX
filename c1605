@@ -1,0 +1,47 @@
+#include <iterator>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+template<class T>
+void out_T(T n){cout<<n<<" ";}
+template<class T>
+int reduce(T ar[],int n);
+int main()
+{
+    //测试long类型具体化
+    long ar[]={23,54,34,45,34,23,23,234,3545,4321,5445,23,34,34,2345,23,345,45,34};
+    int s1=sizeof(ar) / sizeof(long);
+    cout<<"first we have "<<s1 <<"numbers.\n";
+    reduce(ar,s1);
+    
+    string ar2[]={"today","is","today","a","good","be","is","day"};
+    int s2=sizeof(ar2) / sizeof(string);//这个是可行的！
+    cout<<"first we have "<<s2 <<"numbers.\n";
+    reduce(ar2,s2);
+    return 0;
+}
+template<class T>
+int reduce(T ar[],int n)
+{
+    vector<T>arr;
+    for(int i=0;i<n;i++)
+    {
+        arr.push_back(ar[i]);
+    }
+    sort(arr.begin(),arr.end());
+    cout<<"after sorted: ";
+    for_each(arr.begin(),arr.end(),out_T<T>);
+    typename vector<T> :: iterator v_it=unique(arr.begin(),arr.end());
+    
+    arr.erase(v_it,arr.end());
+    cout<<"after sorted&& unique: ";
+    for_each(arr.begin(),arr.end(),out_T<T>);
+    
+    int s= arr.size();
+    cout<<"now we have "<< s <<"numbers.\n";
+    for(int i=0;i<n;i++){ar[i]='\0';}
+    for(int i=0;i<s;i++){ar[i]=arr[i];}
+    return s;
+}
