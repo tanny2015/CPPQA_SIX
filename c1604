@@ -1,0 +1,40 @@
+#include <iterator>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+void out_long(long n){cout<<n<<" ";}
+int reduce(long ar[],int n);
+int main()
+{
+    long ar[]={23,54,34,45,34,23,23,234,3545,4321,5445,23,34,34,2345,23,345,45,34};
+    int s1=sizeof(ar) / sizeof(int);
+    cout<<"first we have "<<s1 <<"numbers.\n";
+    reduce(ar,s1);
+    return 0;
+}
+int reduce(long ar[],int n)
+{
+    
+    vector<long>arr;
+    for(int i=0;i<n;i++)
+    {
+        arr.push_back(ar[i]);
+    }
+    
+    sort(arr.begin(),arr.end());
+    cout<<"after sorted: ";for_each(arr.begin(),arr.end(),out_long);
+    
+    vector<long> :: iterator v_it=unique(arr.begin(),arr.end());
+    arr.erase(v_it,arr.end());//去掉重复值
+    cout<<"after sorted&& unique: ";
+    for_each(arr.begin(),arr.end(),out_long);
+    int s= arr.size();
+    cout<<"now we have "<< s <<"numbers.\n";
+    
+    for(int i=0;i<n;i++){ar[i]='\0';}
+    for(int i=0;i<s;i++){ar[i]=arr[i];}
+    return s;
+}
+
