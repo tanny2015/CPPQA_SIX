@@ -1,0 +1,17 @@
+//5.9.2
+#include < iostream >
+#include < array >
+  using namespace std; //没有这行，后边array被警告还未声明
+const int ArSize = 16;
+
+int main() {
+  array < long double, ArSize > factorials; //用数组就是long long factorials[ArSize];
+  factorials[1] = factorials[0] = 1 LL;
+  for (int i = 2; i < ArSize; i++)
+    factorials[i] = i * factorials[i - 1];
+  for (int i = 0; i < ArSize; i++)
+    std::cout << i << "! = " << factorials[i] << std::endl;
+  // std::cin.get();
+  system("pause");
+  return 0;
+}

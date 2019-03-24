@@ -1,0 +1,17 @@
+#include < iostream >
+  using namespace std;
+
+int main() {
+  int i, j;
+  int T; //将T声明为longlongT时，编译通过，但是答案多了1.
+  cout << "please enter two int number,now please enter the smaller one:";
+  cin >> i;
+  cout << "then enter the bigger one:";
+  cin >> j;
+
+  for (i; i < j + 1; i++) //for里边用“；”，别用逗号。for外边的括号不要有任何符号
+    T += i; //long T+=i  这边直接声明T的时候，编译器报错
+  cout << "the totle value between the two number is :" << T;
+  system("pause");
+  return 0;
+}

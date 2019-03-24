@@ -1,0 +1,159 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+//抽象基类ABC
+class base_abc
+{
+private:
+    double anything;
+public:
+    
+    virtual ~base_abc(){};//
+    virtual void view(){};//这个view()什么都不做，专门用来给别人继承的。配合指针调用子类
+};
+
+
+class baseDMA :virtual  public base_abc//虚基类用于多重继承，安全起见应该将所有的继承基类上写成virtual
+{
+private:
+    char * label;
+    int rating;
+public:
+    baseDMA(const char * l = "null", int r = 0);
+    baseDMA(const baseDMA & rs);
+    virtual ~baseDMA();//虚析构函数  析构的时候能针对性的删除目标对象， 避免每次都只删除基类对象，
+    baseDMA & operator=(const baseDMA & rs);//赋值等号重载
+    void view(){cout<<"1."<<label<<" 's rating is : "<<rating<<endl;};
+};
+
+class lacksDMA :virtual public base_abc,virtual public baseDMA  //公有继承
+{
+private:
+    enum { COL_LEN = 40};
+    char color[COL_LEN];
+public:
+    lacksDMA(const char * c = "blank", const char * l = "null",int r = 0);
+    lacksDMA(const char * c, const baseDMA & rs);
+    void view(){baseDMA::view();cout<<"2."<<"baseDMA::label"<<"'s colour is:"<<color<<endl;};
+};
+
+
+class hasDMA :virtual public base_abc,virtual public baseDMA
+{
+private:
+    char * style;
+public:
+    hasDMA(const char * s = "none", const char * l = "null",int r = 0);
+    hasDMA(const char * s, const baseDMA & rs);
+    hasDMA(const hasDMA & hs);
+    ~hasDMA();
+    hasDMA & operator=(const hasDMA & rs);
+    friend std::ostream & operator<<(std::ostream & os, const hasDMA & rs);
+    void view(){baseDMA::view();cout<<"3."<<"baseDMA::label"<<"'s style is:"<<style<<endl;};
+};
+
+
+//**************************************************************************************************************************************
+
+baseDMA::baseDMA(const char * l, int r)
+{
+    label = new char[std::strlen(l) + 1];
+    std::strcpy(label, l);
+    rating = r;
+}
+
+baseDMA::baseDMA(const baseDMA & rs)
+{
+    label = new char[std::strlen(rs.label) + 1];
+    std::strcpy(label, rs.label);
+    rating = rs.rating;
+}
+
+baseDMA::~baseDMA()
+{
+    delete [] label;
+}
+
+baseDMA & baseDMA::operator=(const baseDMA & rs)
+{
+    if (this == &rs)
+        return *this;
+    delete [] label;
+    label = new char[std::strlen(rs.label) + 1];
+    std::strcpy(label, rs.label);
+    rating = rs.rating;
+    return *this;
+}
+//*******************************************************************************************************************************
+
+lacksDMA::lacksDMA(const char * c, const char * l, int r) : baseDMA(l, r)  //good ！构造函数里边有指针成员的，都需要深度复制
+{
+    std::strncpy(color, c, 39);
+    color[39] = '\0';
+}
+
+lacksDMA::lacksDMA(const char * c, const baseDMA & rs): baseDMA(rs)
+{
+    std::strncpy(color, c, COL_LEN - 1);
+    color[COL_LEN - 1] = '\0';
+}
+//****************************************************************************************
+
+hasDMA::hasDMA(const char * s, const char * l, int r): baseDMA(l, r)
+{
+    style = new char[std::strlen(s) + 1];
+    std::strcpy(style, s);
+}
+hasDMA::hasDMA(const char * s, const baseDMA & rs): baseDMA(rs)
+{
+    style = new char[std::strlen(s) + 1];
+    std::strcpy(style, s);
+}
+hasDMA::hasDMA(const hasDMA & hs) : baseDMA(hs)
+{
+    style = new char[std::strlen(hs.style) + 1];
+    std::strcpy(style, hs.style);
+}
+hasDMA::~hasDMA()
+{
+    delete [] style;
+}
+hasDMA & hasDMA::operator=(const hasDMA & hs)//赋值等号重载
+{
+    if (this == &hs)
+        return *this;
+    baseDMA::operator=(hs);
+    delete [] style;
+    style = new char[std::strlen(hs.style) + 1];
+    std::strcpy(style, hs.style);
+    return *this;
+}
+
+
+int main()
+{
+    baseDMA shirt("Portabelly", 8);
+    lacksDMA balloon("red", "Blimpo", 4);
+    hasDMA map("Mercator", "Buffalo Keys", 5);
+    cout << "Displaying baseDMA object:\n";
+    base_abc *pt= & shirt;
+    pt->view();
+    cout << "Displaying lacksDMA object:\n";
+    pt= & balloon;
+    pt->view();
+    cout << "Displaying hasDMA object:\n";
+    pt= & map;
+    pt->view();
+    
+    lacksDMA balloon2(balloon);
+    cout << "Result of lacksDMA copy:\n";
+    pt= &balloon2;
+    pt->view();
+    hasDMA map2;
+    map2 = map;
+    cout << "Result of hasDMA assignment:\n";
+    pt= &map2;
+    pt->view();
+    // std::cin.get();
+    return 0;
+}

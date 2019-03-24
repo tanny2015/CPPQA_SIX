@@ -1,0 +1,61 @@
+//7.2
+#include < iostream >
+  using namespace std;
+int enter1(int, double);
+void show1(int, double[]);
+void average1(int, double[]);
+const int m = 3;
+double * scores = new double[m];
+
+int main() {
+  int i = 0;
+  double temp;
+  cout << "now enter the score of 1,type '0'to quit! \n";
+  cin >> temp;
+  while (i < m && temp != 0) {
+    i = enter1(i, temp); //自定义函数return回来的东西，必须main函数这边有人去接，不然自定义函数里边的返回值永远出不来。当然可以在自定义函数中改，但是只能改的是全局变量的值----按值传递，不改变temp原始值，使用不过是temp原始值得一个副本。
+    if (i < m) {
+      cout << "now enter the score of  " << i + 1 << "  type '00000'to quite!\n";
+      cin >> temp; //这个输入模块放在主函数这里，否则在这个程序不行，他只会读取第一次输入的那个值。
+    }
+  }
+  cout << "you have touch the margin!,now we see the result \n";
+  show1(i - 1, scores);
+  average1(i - 1, scores);
+  delete[] scores;
+  system("pause");
+  return 0;
+}
+
+//输入函数
+int enter1(int i, double s) {
+  if (!cin) { //cctype中的那些参数是char，一般是单个字符的检查，如果检查输入的是不是对应的类型，用if（cin）就可以了
+    cin.clear();
+    cin.sync(); //必须有这个 否则还是无限循环
+    cout << "it is a wrong enter ,please re-enter a right one!\n";
+    cin >> s; //要有这个，否则循环没法进行下去，只会无限循环。
+    return i; //在一个函数中，如果要结束这个函数，一般写个return就行，return0是表示程序无错误运行结束退出，没有其他的特别意义
+  } else {
+    scores[i] = s;
+    i++;
+    return i; //要把i+1返回给main()
+  }
+}
+//在一行上显示所有成绩
+void show1(int max1, double * s) //m实际上为i-1 ，
+{
+  cout << "the whole " << max1 + 1 << "scores are as follows:  \n";
+  for (int j = 0; j < max1 + 1; j++) {
+    cout << j + 1 << ", " << s[j] << " ";
+  }
+}
+//计算平均数
+void average1(int max1, double * s) {
+  double ave = 0;
+  for (int j = 0; j < max1 + 1; j++) {
+    ave += s[j];
+  }
+
+  cout << "the average of the " << max1 + 1 << "digit you entered is:  " << ave / (max1 + 1) << endl;
+  cout << "ok,Bye！" << endl;
+}

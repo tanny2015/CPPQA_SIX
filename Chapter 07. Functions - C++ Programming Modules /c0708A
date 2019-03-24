@@ -1,0 +1,54 @@
+//7.8.a
+#include < iostream >
+  using namespace std;
+const int Seasons = 4;
+
+//给数组指针赋值 ,const char *bird=“wren”；这个之所以可以是因为：其实字符串本身就是指向第一个字符的指针。它的值是其第一个字符的地址。跟数组类似。
+//cout<<bird ---出来wren;cout<<bird[0]--出来w
+const char arr[Seasons][10] = {
+  "spring",
+  "summmer",
+  "fall",
+  "winter"
+};
+const char( * p)[10]; //int (*p)[10]={{1,2},{3,4}}不要给int (*p)[9]赋值，因为基本上不行
+
+void fill(double[]); //数组参数声明
+void show(double[]);
+int main() { //给数组指针赋值,如果把下边俩句放到main外声明，会报错 p does not name a type
+  int a[2][2] = {
+    {
+      1,
+      2
+    },
+    {
+      3,
+      4
+    }
+  };
+  p = arr; //*p=arr[0] 这个会报错说*p是只读不能改。二维数组中行指针不能改动
+  double expenses[4];
+  fill(expenses);
+  show(expenses);
+
+  system("pause");
+  return 0;
+}
+
+//调用的时候只要写数组名
+void fill(double pa[]) {
+  for (int i = 0; i < Seasons; i++) {
+    std::cout << "Enter " << * (p + i) << " expenses: ";
+    std::cin >> pa[i];
+  }
+}
+
+void show(double pa[]) {
+  double total = 0.0;
+  std::cout << "\nEXPENSES\n";
+  for (int i = 0; i < Seasons; i++) {
+    std::cout << * (p + i) << ": $" << pa[i] << '\n';
+    total += pa[i];
+  }
+  std::cout << "Total: $" << total << '\n';
+}

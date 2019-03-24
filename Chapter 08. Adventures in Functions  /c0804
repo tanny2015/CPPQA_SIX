@@ -1,0 +1,60 @@
+//8.4
+#include < iostream >
+#include < cstring >
+  using namespace std;
+//一般使用的是<string>头文件，cstring是c的东西，但c++为了兼容他仍然保留，一般用来处理char
+// for strlen(), strcpy()
+struct stringy {
+  char * str; // points to a string
+  int ct; // length of string (not counting '\0')
+};
+
+void set(stringy & , const char * );
+void show(const char * , int time = 1); //这个函数有默认值
+void show(const stringy & , int time = 1);
+
+int main() {
+  show("Reality isn't what it used to be.", 1);
+  stringy beany;
+  char testing[] = "Reality isn't what it used to be.";
+  set(beany, testing); //设置beany的字符串长度和内容,跟testing的一模一样。
+  show(beany);
+  show(beany, 2);
+  testing[0] = 'D';
+  testing[1] = 'u';
+  show(testing);
+  show(testing, 3);
+  show("Done!");
+  //delete[]beany.str;放这个，或delete beany.str都会出现运行错误，去掉就不会。-- aa.str=new char[20];只有20个字符空间，而"Reality isn't what it used to be."已经超出了，所以会报错
+  system("pause");
+  return 0;
+}
+
+void set(stringy & aa,
+  const char * p) {
+  aa.str = new char[20];
+  strcpy(aa.str, p);
+  aa.ct = strlen(p);
+}
+
+void show(const char * q, int time) {
+  int i;
+  int j = 0;
+  for (j = 0; j < time; j++) {
+    for (i = 0; i < strlen(q); i++) {
+      cout << q[i];
+    }
+    cout << endl;
+  }
+}
+
+void show(const stringy & q, int time) {
+  int i;
+  int j = 0;
+  for (j = 0; j < time; j++) {
+    for (i = 0; i < q.ct; i++) {
+      cout << q.str[i];
+    }
+    cout << endl;
+  }
+}

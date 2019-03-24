@@ -1,0 +1,104 @@
+//这个还没有完善
+#include<iostream>
+#include<fstream>
+#include<cstdlib>
+#include<cstring>
+using namespace std;
+int main()
+{
+        
+        ifstream cin1("cin1.txt",ios::in);
+        if(cin1.is_open()){cout<<"cin1.txt has been opened!"<<endl;}
+        else{cerr<<" ERROR IN READING cin1.txt！"<<endl; exit(EXIT_FAILURE);}
+        
+        ifstream cin2("cin2.txt",ios::in);
+        if(cin2.is_open()){cout<<"cin2.txt has been opened!"<<endl;}
+        else{cerr<<" ERROR IN READING cin2.txt！"<<endl; exit(EXIT_FAILURE);}
+        
+        fstream out ("out.txt" ,ios::in|ios::out);
+        if(out.is_open()){cout<<"out.txt has been opened!"<<endl;}
+        else{cerr<<" ERROR IN READING out.txt！"<<endl; exit(EXIT_FAILURE);}
+        
+        
+        cin1.clear();
+        cin2.clear();
+        out.clear();
+        cout<<cin1.tellg()<<endl;
+        cout<<cin2.tellg()<<endl;
+        cout<<out.tellp()<<endl;
+        
+        cin1.seekg(0,ios::beg);
+        cin2.seekg(0,ios::beg);
+        out.seekp(0,ios::end);
+        
+        cout<<cin1.tellg()<<endl;
+        cout<<cin2.tellg()<<endl;
+        cout<<out.tellp()<<endl;
+        out<<'\n';
+        //当cin1中有内容的时候--这边思路是以cin1.txt为中心，作为全集。分成cin1有内容和无内容两个方面来阐述，每个方面都描述了cin2的两种情况，以便达到全面。
+        cin1.clear();  cin2.clear();  out.clear();
+        char ch[150]={'\0'};
+        while(cin1.peek()!= EOF)
+        {
+            out.clear();
+            cin1.clear();
+            cin1.getline(ch,sizeof(ch));
+            out<<ch;
+            if(cin2.peek()!=EOF)
+            {
+                out.clear();
+                cin2.clear();
+                
+                cin2.getline(ch,sizeof(ch));
+                
+                out<<" and "<<ch<<endl;
+                
+                
+            }
+            else
+            {
+                
+                out.clear();
+                cin2.clear();
+                
+                out<<endl;
+                continue;
+            }
+            
+        }
+        
+        cin1.clear();
+        while(cin1.peek()==EOF)
+        {
+            if(cin2.peek()!=EOF)
+            {
+                out.clear();
+                cin2.clear();
+                
+                cin2.getline(ch,sizeof(ch));
+                out<<ch<<endl;
+                
+            }
+            else
+            {
+                cout<<"things has been done here!"<<endl;
+                break;
+            }
+        }
+        
+        out.seekg(0);
+        
+        char c;
+        while(out.peek()!=EOF)
+        {
+            out.get(c);
+            cout<<c;
+            out.clear();
+        }
+        out.clear();
+        cout<<"ok,done!"<<endl;
+        
+        
+        return 0;
+        
+    }

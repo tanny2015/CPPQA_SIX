@@ -1,0 +1,48 @@
+//7.3
+#include < iostream >
+  using namespace std;
+struct box {
+  char maker[40];
+  float height;
+  float width;
+  float length;
+  float volume;
+};
+const int m = 3;
+box * aa = new box[m];
+void input1(int, box[]);
+float volume1(int, box * );
+
+int main() {
+  int i;
+  input1(i, aa);
+  delete[] aa;
+  system("pause");
+  return 0;
+}
+//按值传递box结构，并显示每个成员的值。
+//A：输入box数组成员的值。
+void input1(int i, box a[]) {//因为这里是按值传递，只有全局变量在这里能被改动
+  for (i = 0; i < m; i++) {
+    cout << "now enter the height of box " << i + 1 << " :";
+    cin >> a[i].height;
+    cout << endl;
+    cout << "now enter the width of box " << i + 1 << " :";
+    cin >> a[i].width;
+    cout << endl;
+    cout << "now enter the length of box " << i + 1 << " :";
+    cin >> a[i].length;
+    cout << endl;
+    a[i].volume = volume1(i, a); //volume1(i,&a)这个是不行的，因为a[]这a是数组名，本身已经是地址。
+  }
+  for (i = 0; i < m; i++) {
+    cout << "the height of the " << i + 1 << " one is: " << a[i].height << "\t" << endl;
+    cout << "the width  of the " << i + 1 << " one is: " << a[i].width << "\t" << endl;
+    cout << "the length of the " << i + 1 << " one is: " << a[i].length << "\t" << endl;
+    cout << "the volume of the " << i + 1 << " one is: " << a[i].volume << "\t" << endl;
+  }
+}
+//按地址传递
+float volume1(int j, box * b) {
+  return (b[j].height) * (b[j].width) * (b[j].length);
+}

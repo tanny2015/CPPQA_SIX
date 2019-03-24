@@ -1,0 +1,22 @@
+//5.9.4
+#include < iostream >
+  using namespace std;
+
+int main() {
+  double FD = 0;
+  double FC = 1;
+  double Dah = 100, Cel = 100; //如果这边没有赋值，while(Cel<=Dah)判断式的第一步判断不了。while的判断式中的变量初始值须知道
+  int i = 0;
+  while (Cel <= Dah) {
+    FD += 10;
+    Dah = FD + 100;
+    FC *= 1.05;
+    Cel = FC * 100;
+    i++;
+  }
+  cout << "After " << i << " year, Cel is bigger than Dah" << endl;
+  cout << "Dah=" << Dah << "   Cel=" << Cel;
+
+  system("pause");
+  return 0;
+}

@@ -1,0 +1,57 @@
+#include < iostream >
+#include < cstring >
+  using namespace std;
+const int Len = 40;
+struct golf {
+  char fullname[Len];
+  int handicap;
+};
+
+//将结构赋值为现成的数据，不需要用户输入。
+void setgolf(golf & g,const char * name, int hc) {
+  strcpy(g.fullname, name); // g.fullname=name;错误，指针和指针之间，以及有时指针和数组名之间不能互相赋值，如果是char指针，考虑用strcpy()
+  g.handicap = hc;
+}
+
+//将结构赋值为需要用户输入的数据。
+int setgolf(golf & g) {
+  cout << "please now enter the fullname: ";
+  cin >> g.fullname; //这种用法是可以的
+  if (!cin) {
+    cout << "no name has been entered! now quit.";
+    return 0;
+  }
+  cin.sync();
+  cout << endl;
+  cout << "now enter the handicap :";
+  cin >> g.handicap;
+  cin.sync();
+  return 1;
+}
+
+//将handicap重新设定新的值
+void handicap(golf & g, int hc) {
+  g.handicap = hc;
+}
+
+// 显示结构内容
+void showgolf(const golf & g) {
+  cout << "now let's see the result: \n" <<
+    g.fullname << "'s handicap is: " << g.handicap << endl;
+}
+
+//写个实现
+int main() {
+  golf ann, andy; //声明俩个结构变量
+  //使用非交互版本
+  setgolf(ann, "Ann Birdfree", 24);
+  showgolf(ann);
+  handicap(ann, 23); //修改handicap的值
+  showgolf(ann);
+  //使用交互版本
+  setgolf(andy); //让用户输入值
+  showgolf(andy);
+
+  system("pause");
+  return 0;
+}

@@ -1,0 +1,26 @@
+//5.9.10
+#include < iostream >
+  using namespace std;
+int main() {
+  int row, col, r, c, m, n;
+  char maxtemps[m][n];
+  cout << "enter number of rows:";
+  cin >> row;
+  col = row;
+
+  for (int r = 0; r < row; r++) {
+    for (int c = 0; c < col; c++) { //多加个括号，把cout<<maxtemps[r][c];涵括，这个c就可以共享变化趋势
+      {
+        if (c < col - r - 1) {
+          maxtemps[r][c] = '*';
+        } else {
+          maxtemps[r][c] = '#';
+        }
+      }
+      cout << maxtemps[r][c];
+    }
+    cout << endl;
+  }
+  system("pause");
+  return 0;
+}

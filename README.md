@@ -1,8 +1,36 @@
 HELLO!
-THIS IS MINE EXERCISE  ANSWERS TO PPQA_SIX(ABBR)   
-HOPE WE CAN COMMUNICATE CONCERNING THIS!   
-GOOD LUCK!    
-THESE CODES COULD BE COMPILED WELL IN CODEBLOCKS(13.12.0.0) ,    
-BUT SOME OF THEM MAY NEED  "C++11"SUPPORT.    
+THIS IS MINE EXERCISE ANSWERS TO C++ PRIMER PLUS(6TH EDITION,STEPHEN PRATA)     
+THESE CODES COULD BE COMPILED WELL IN CODEBLOCKS(13.12.0.0),    
+BUT SOME OF THEM MAY NEED  "C++11" SUPPORT.    
 
 
+### COMPLETED EXERCISES         
+
+| Chapter 5 | Chapter 6 | Chapter 7 | Chapter 8 | Chapter 9 | Chapter 10 | Chapter 11 |
+| :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: |
+|  0501   |  0601   |  0701   |  0801   |  0901   |  1001   |  1101A   |
+|  0502   |  0602   |  0702   |  0802   |    -     |  1002   |  1101B   |
+|  0503   |  0603   |  0703   |  0803   |    -     |  1003   |  1101C   |
+|  0504   |  0604   |  0704   |  0804   |  0904   |  1004   |  1104    |
+|  0505   |  0605   |  0705-0707 | 0805 |         |  1005   |  1105    |
+|  0506   |  0606   |  0708A   |        |         |  1006   |  1106    |
+|  0507   |  0607   |  0708B   |        |         |  1007   |  1107    |
+|  0508   |         |  0710-1  |        |         |  1008   |          |
+|  0509   |         |  0710-2  |        |         |         |          |
+|  0510   |         |          |        |         |         |          |
+
+<br>
+<br>     
+
+| Chapter 12 | Chapter 13 | Chapter 14 | Chapter 15 | Chapter 16 | Chapter 17 | Chapter 18 |
+| :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: |
+|   -     |  1301   |  1401   |           |  1601   |  1701   |           |
+|   -     |  1302   |         |           |  1602   |  1702   |           |
+|  1203   |    -    |         |           |  1603   |  1703   |           |
+|  1204   |  1304   |         |           |  1604   |  1704   |           |
+|         |         |         |           |  1605   |         |           |
+|         |         |         |           |  1606   |         |           |
+|         |         |         |           |  1607   |         |           |
+|         |         |         |           |  1608   |         |           |
+|         |         |         |           |  1609   |         |           |
+|         |         |         |           |  1610   |         |           |

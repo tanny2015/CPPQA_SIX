@@ -1,0 +1,125 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+// 基类头文件
+class Cd
+{
+private:
+ 
+    char performers[50];  //表演者
+    char label[20];    //标签
+    double playtime; // 演奏的分钟数
+    
+protected:
+    int selections; // 可选的种类个数
+    
+public:
+    Cd(char * s1, char * s2, int n, double x);//建立一个cd的信息
+    
+    Cd(){};
+    
+    virtual ~Cd(){cout<<"此处调用Cd类析构函数！\n"; };
+    Cd & operator=(const Cd & ); //赋值等号重载--一般由于这种函数的参数不完全一样，所以不声明为虚函数
+    virtual void Report() const; // 显示该cd所有信息
+};
+
+//************************************************************************************************
+class Classic:public Cd
+{
+private:
+    
+    char primary[20];
+    
+public:
+    Classic(char*pr,char * s1, char * s2, int n, double x);//建立信息框架
+    Classic(){};//默认构造函数
+     ~Classic(){cout<<"此处调用Classic类析构函数！\n"; };
+    Classic & operator=(const Classic & d); //赋值等号重载
+    void Report() const; // 显示该cd所有信息
+};
+//************************************************************************************************
+
+//建立一个cd的信息
+Cd::Cd(char * s1, char * s2, int n, double x):selections(n),playtime(x)
+{
+    
+    strcpy(performers,s1);
+    
+    strcpy(label,s2);
+}
+
+
+Cd& Cd::operator=(const Cd & d)
+{
+    if(this==&d)
+    {
+        return *this;
+    }
+    else
+        strcpy(performers,d.performers);
+    //指针label
+    strcpy(label,d.label);
+    selections=d.selections;//selections
+    playtime=d.playtime;//playtime
+}
+
+void Cd::Report() const
+{
+    cout<<"CD:"<<label<<"which is played by "<<performers<<"and it lasts for about "
+    <<playtime<<" minutes, In this cd, you have "<<selections<<" selections! \n";
+}
+
+
+//************************************************************************************************
+
+
+Classic::Classic(char*pr,char * s1, char * s2, int n, double x):Cd(s1,s2,n,x)
+{
+    strcpy(primary,pr);
+}
+
+Classic & Classic::operator=(const Classic & d)
+{
+	   if (this == &d)
+           return *this;
+       else
+           Cd::operator=(d);//调用基类的赋值等号的那个函数，剩下的只要把派生类自己新增的赋值给做好就行了
+	   
+	   strncpy(primary,d.primary,19);
+}
+
+void Classic::Report() const
+{
+    Cd::Report() ;
+    cout<<"it's primary classic is: "<<primary<<endl;
+}
+
+//*************************************************************************
+//测试check
+void Bravo(const Cd & disk);
+int main()
+{
+    Cd c1("Beatles", "Capitol", 14, 35.5);
+    Classic c2 = Classic("Piano Sonata in B flat, Fantasia in C",
+                         "Alfred Brendel", "Philips", 2, 57.17);  //赋值号重载，直接继承基类的，再改一下
+    Cd *pcd = &c1; //虚函数配合声明指向基类的指针实现多态性
+    cout << "Using object directly:\n";
+    c1.Report();
+    c2.Report();
+    cout << "Using type cd * pointer to objects:\n";
+    pcd->Report();
+    pcd = &c2;
+    pcd->Report();
+    cout << "Calling a function with a Cd reference argument:\n";
+    Bravo(c1);
+    Bravo(c2);
+    cout << "Testing assignment: ";
+    Classic copy;
+    copy = c2;
+    copy.Report();
+    return 0;
+}
+void Bravo(const Cd & disk)
+{
+    disk.Report();
+}

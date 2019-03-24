@@ -1,0 +1,52 @@
+//7.4
+#include < iostream >
+  using namespace std;
+double odds(int, int);
+int all, alls;
+int pick, picks;
+double possibility;
+
+int main() {
+  cout << "generall price:what is the totle balls?  ";
+  cin >> all;
+  cout << "generall price:how many would you pick from the totle? ";
+  cin >> pick;
+  cout << endl;
+  double r1 = odds(all, pick);
+
+  cout << "special price:what is the totle balls?  ";
+  cin >> alls;
+  cout << "special price:how many would you pick from the totle? ";
+  cin >> picks;
+  cout << endl;
+  double r2 = odds(alls, picks);
+
+  possibility = r1 * r2;
+  cout << "the possibility that you finally hit the box is :" << possibility << ",  good luck! /n";
+
+  system("pause");
+  return 0;
+}
+
+double odds(int a, int p) {
+  double result = 1;
+  int m = a;
+  int n = p; //int m=a;int n=p;这俩东西中间不要用逗号 expected unqualified-id before 'int'，就算同类型的声明+初始化语句也要用封号隔开，不同于int m,n，因为这里没有赋值才能这么用逗号
+  if (p < a) //想让他运行完直接结束的就用if，如果输入的选择项目小于总项目则正常运行
+  {
+    for (m = a, n = p; m > p && n >= 1; m--, n--) //for (int m=a,int n=p;m>n && n>=1; m--,n--)--报错expected unqualified-id before 'int'，for里边不能一下声明俩个变量
+    {
+      result = result * n / m;
+    }
+  } else //如果输入的选择项目大于总项目则让重新输入
+  {
+    cout << "enter in wrong logic,since your pick is out of the total! enter again!" << endl;
+    cout << "what is the totle balls?  ";
+    cin >> a;
+    cout << "how many would you pick from the totle? ";
+    cin >> p;
+    cout << endl;
+    odds(a, p);
+  }
+  return result;
+}

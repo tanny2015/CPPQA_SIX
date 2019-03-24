@@ -1,0 +1,52 @@
+//8.2
+#include < iostream >
+  using namespace std;
+struct candybar{ //结构体不会被调用，只会调用具体使用中的结构成员
+  char * name; //结构体中的char指针，不需要去释放
+  double weight;
+  int hot;
+};
+
+const int m = 3;
+candybar member[m]; //为数组分配的内存，用完了系统会自己回收
+void f_input(candybar & , char * p = "munch", double a = 2.85, int b = 350); //函数参数的初始化在原型中设置，后边都不需要去管，设置参数须从右向左
+void f_show(const candybar & );
+int main() {
+  cout << "please now enter some information about candybar:\n";
+  //输入东西
+  double a;
+  int b;
+  for (int i = 0; i < m; i++) {
+    f_input(member[i], member[i].name, a, b);
+  }
+  //打印结构数组内容
+  for (int i = 0; i < m; i++)
+    f_show(member[i]);
+
+  for (int i = 0; i < m; i++) {
+    delete member[i].name;
+  } //要删除结构中的一个char动态指针，得一个一个具体的去删除
+
+  system("pause");
+  return 0;
+}
+
+//往结构数组里边输入东西
+void f_input(candybar & bb, char * p, double a, int b) {
+  static int k = 0; //跟踪函数被调用的次数
+  k = k + 1;
+  bb.name = new char[10]; //给结构中的一个指针分配空间。
+  cout << "enter the name of the " << k << "  one: ";
+  cin >> bb.name;
+  getchar();
+  cout << "enter the weight of the " << k << "  one: ";
+  cin >> a;
+  cout << "enter the hot of the " << k << "  one: ";
+  cin >> b;
+  bb.weight = a;
+  bb.hot = b;
+}
+
+void f_show(const candybar & aa) {
+  cout << aa.name << " 's weight is :" << aa.weight << "and it's hot is :" << aa.hot << endl;
+}

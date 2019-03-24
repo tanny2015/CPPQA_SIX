@@ -1,0 +1,154 @@
+#include < iostream >
+#include < cstring >
+#include < cctype >
+  using namespace std;
+typedef unsigned long Item;
+
+class Stack {
+  private:
+    enum {
+      MAX = 10
+    };
+	  Item * pitems;
+	  int size;
+	  int top;
+
+  public:
+    Stack(int n = MAX);
+	  Stack(const Stack & st);
+	  ~Stack();
+	  bool isempty() const;
+	  bool isfull() const;
+	  bool push(const Item & item);
+	  bool pop(Item & item);
+	  Stack & operator = (const Stack & st);
+	  //用来调用私有成员的函数--类的私有成员是封装的，在main中不能用aa.size来调用。如果是public才行
+	  Item & get_pitems(int i) {
+	    return pitems[i];
+	  };
+		//如果不是返回引用，用aa.pitems[1]=1234,会报错“ =号左边应该有个运算符(或者变量)”，那是返回一个临时变量。不要给临时变量赋值。 而如果是引用，则是this指向的东西。
+};
+
+Stack::Stack(int n) {
+  size = top = n;
+  pitems = new Item[size + 1];
+  pitems[0] = '\0';
+}
+
+Stack::Stack(const Stack & st) {
+  size = st.size;
+  top = st.top;
+  pitems = new Item[size + 1];
+  for (int i = 0; i < size; i++) {
+    pitems[i] = st.pitems[i];
+  } //非char数组不能用strcpy，只能用循环一个一个赋值
+}
+
+Stack::~Stack() {
+  cout << "析构函数被调用了" << endl;
+  delete[] pitems;
+}
+
+bool Stack::isempty() const {
+  return top == 0;
+}
+
+bool Stack::isfull() const {
+  return top == MAX;
+}
+
+bool Stack::push(const Item & item) {
+  if (top >= MAX) {
+    return false;
+  } else {
+    pitems[top] = item;
+    size = size + 1;
+    top = top + 1;
+    return true;
+  }
+}
+
+bool Stack::pop(Item & item) {
+  if (top <= 0) {
+    return false;
+  } else {
+    pitems[top - 1] = '\0';
+    top = top - 1;
+    size = size - 1;
+    return true;
+  }
+}
+
+Stack & Stack::operator = (const Stack & st) {
+  size = st.size;
+  top = st.top;
+  pitems = new Item[size + 1];
+  for (int i = 0; i < size; i++) {
+    pitems[i] = st.pitems[i];
+  }
+  return *this;
+}
+
+int main() {
+  cout << "测试赋值符号：" << endl;
+  Stack aa(10);
+  aa.get_pitems(0) = 12345;
+  aa.get_pitems(1) = 23478;
+  aa.get_pitems(9) = 223478;
+  cout << "aa打印的数字是：" << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << aa.get_pitems(i) << ",";
+  }
+
+  Stack bb = aa;
+  cout << "bb=aa，则bb打印的数字是：" << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << bb.get_pitems(i) << ",";
+  }
+
+  cout << "测试复制构造函数：" << endl;
+  Stack cc(aa);
+  cout << "cc(aa)，则cc打印的数字是：" << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << cc.get_pitems(i) << ",";
+  }
+
+  cout << "测试其他东西：" << endl;
+  Stack st;
+  char ch;
+  unsigned long po;
+  cout << "Please enter A to add a purchase order,\n" <<
+    "P to process a PO, or Q to quit.\n";
+  while (cin >> ch && toupper(ch) != 'Q') {
+    while (cin.get() != '\n')
+      continue;
+    if (!isalpha(ch)) {
+      cout << '\a';
+      continue;
+    }
+    switch (ch) {
+    case 'A':
+    case 'a':
+      cout << "Enter a PO number to add: ";
+      cin >> po;
+      if (st.isfull())
+        cout << "stack already full\n";
+      else
+        st.push(po);
+      break;
+    case 'P':
+    case 'p':
+      if (st.isempty())
+        cout << "stack already empty\n";
+      else {
+        st.pop(po);
+        cout << "PO #" << po << " popped\n";
+      }
+      break;
+    }
+    cout << "Please enter A to add a purchase order,\n" <<
+      "P to process a PO, or Q to quit.\n";
+  }
+  cout << "Bye\n";
+  return 0;
+}
