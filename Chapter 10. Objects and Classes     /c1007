@@ -1,0 +1,43 @@
+#include < iostream >
+#include < cstring >
+  using namespace std;
+const int max1 = 19;
+class plory {
+  private:
+    char name[max1];
+	  int ct;
+  public:
+    plory(const char a[] = "plorga", int b = 50); //别写成plory(name="plorga", ct=50)这个报错
+	  void set_ct();
+	  void show();
+};
+
+//函数解释
+plory::plory(const char a[], int b) {
+  strcpy(name, a);
+  ct = b;
+}
+
+void plory::set_ct() {
+  int a;
+  cout << "enter the new value for ct:";
+  cin >> a;
+  ct = a;
+}
+
+void plory::show() {
+  cout << "now let's see the result: \n" <<
+    name << "'s ct is :" << ct << endl;
+}
+
+//main()实现
+int main() {
+  plory xiaoming("xiaoming", 245);
+  xiaoming.show();
+
+  xiaoming.set_ct(); //这个非构造函数的public函数，可操作范围很大。
+  xiaoming.show();
+
+  system("pause");
+  return 0;
+}

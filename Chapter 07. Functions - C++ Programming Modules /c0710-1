@@ -1,0 +1,41 @@
+//7.10(1)
+#include < iostream >
+  using namespace std;
+double( * pt)(double, double);
+double calculate(double, double, double(( * )(double, double)));
+double aaa(double, double);
+double bbb(double, double);
+
+int main() {
+  double aa, bb;
+  calculate(aa, bb, pt);
+  cout << "done!";
+  system("pause");
+  return 0;
+}
+
+double calculate(double a, double b, double( * p)(double, double)){ //注意这种调用方法
+  p = NULL;
+  double cc;
+  cout << "now enter two number: \n";
+  while (cin >> a && cin >> b){
+  //如果在while之前已有cin>>a和cin>>b,那么这边的这个循环除非多输入俩个字，一共输入4个，否则再怎么回车都没用。while在这儿等输入字符
+  //直接cin>>a,即为原来传过来的参数。 除了指针和引用之外的其他数值【const限定的也不用考虑这个】，不需要担心数值被变化而去重新赋值，比如aa=a
+    p = aaa;
+    cc = ( * p)(a, b);
+    cout << "相加函数： " << cc << endl;
+    p = bbb;
+    cc = ( * p)(a, b);
+    cout << "相乘函数： " << cc << endl;
+    cout << "now enter two number: \n";
+  }
+  return cc;
+}
+
+double aaa(double a, double b) {
+  return a + b;
+}
+
+double bbb(double a, double b) {
+  return a * b;
+}

@@ -1,0 +1,131 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <memory>
+#include <iterator>
+    using namespace std;
+    struct Review
+    {
+        std::string title;
+        int rating;
+        double price;
+    };
+    bool operator < (const shared_ptr<Review>  r1, const shared_ptr<Review>  r2);
+    bool rating_less_than(const shared_ptr<Review>  r1, const shared_ptr<Review>  r2);
+    bool price_less_than(const shared_ptr<Review>  r1, const shared_ptr<Review>  r2);
+    void ShowReview(const shared_ptr<Review>  rr);
+    bool FillReview(shared_ptr<Review> rr)
+    {
+        cout << "Enter book title (quit to quit): ";
+        getline(cin,rr->title);
+        if (rr->title == "quit")
+            return false;
+        cout << "Enter book rating: ";
+        cin >> rr->rating;
+        cin.clear();
+        cout << "Enter book price: ";
+        cin >> rr->price;
+        if (!cin)
+            return false;
+        
+        while (cin.get() != '\n')
+            continue;
+        return true;
+    }
+    const int max_size=1000;
+    int main()
+    {
+        using namespace std;
+        
+        shared_ptr<Review> temp ( new Review {" ",0,0});//智能指针甚至可以匿名初始化p671
+        
+        vector<shared_ptr<Review>>point;
+        point.reserve(10000);
+        while (FillReview(temp))
+        {
+            point.push_back(temp);
+            temp= shared_ptr<Review>  ( new Review {" ",0,0});
+        }
+        
+        if (point.size() > 0)
+        {
+            cout << "Thank you. You entered the following "
+            << point.size() << " ratings:\n"
+            << "Rating\tBook\n"   << "price\tBook\n";
+            cout<<"这个是原始顺序输出：\nRating\tBook\n ";
+            for_each(point.begin(), point.end(), ShowReview);
+            sort(point.begin(),point.end());
+            cout << "按照书名顺序输出:\nRating\tBook\n";
+            for_each(point.begin(), point.end(), ShowReview);
+            sort(point.begin(), point.end(), rating_less_than);
+            cout << "按照评分 大到小 顺序输出：\nRating\tBook\n";
+            for_each(point.begin(), point.end(), ShowReview);
+            sort(point.rbegin(), point.rend(), rating_less_than);
+            cout << "按照评分 小到大 顺序输出：\nRating\tBook\n";
+            for_each(point.begin(), point.end(), ShowReview);
+            sort(point.begin(), point.end(), price_less_than);
+            cout << "按照价格 大到小 顺序输出：\nRating\tBook\n";
+            for_each(point.begin(), point.end(), ShowReview);
+            sort(point.rbegin(), point.rend(), price_less_than);
+            cout << "按照价格 小到大 顺序输出：\nRating\tBook\n";
+            for_each(point.begin(), point.end(), ShowReview);
+            random_shuffle(point.begin(), point.end());
+            cout << "按照随机顺序输出:\nRating\tBook\n";
+            for_each(point.begin(), point.end(), ShowReview);
+        }
+        else
+            cout << "No entries. ";
+        cout << "Bye.\n";
+        // cin.get();
+        return 0;
+    }
+    
+    bool operator < (const shared_ptr<Review>  r1, const shared_ptr<Review>  r2)
+    {
+        if (r1->title < r2->title)
+            return true;
+        else if (r1->title == r2->title && r1->rating < r2->rating)
+            return true;
+        else
+            return false;
+    }
+    
+    bool rating_less_than(const shared_ptr<Review>  r1, const shared_ptr<Review>  r2)
+    {
+        if (r1->rating < r2->rating)
+            return true;
+        else
+            return false;
+    }
+    
+    bool price_less_than(const shared_ptr<Review>  r1, const shared_ptr<Review>  r2)
+    {
+        if (r1->price < r2->price)
+            return true;
+        else
+            return false;
+    }
+    
+    bool FillReview(shared_ptr<Review>  &rr)
+    {
+        std::cout << "Enter book title (quit to quit): ";
+        std::getline(std::cin,rr->title);
+        if (rr->title == "quit")
+            return false;
+        std::cout << "Enter book rating: ";
+        std::cin >> rr->rating;
+        std::cout << "Enter book price: ";
+        std::cin >> rr->price;
+        if (!std::cin)
+            return false;
+        // get rid of rest of input line
+        while (std::cin.get() != '\n')
+            continue;
+        return true;
+    }
+    void ShowReview(const shared_ptr<Review>  rr)
+    {
+        std::cout << rr->rating << "\t" << rr->title<< "\t" << rr->price << std::endl;
+    }
+    

@@ -1,0 +1,62 @@
+#include < iostream >
+#include < string >
+#include < cstring >
+  using namespace std;
+
+class Person {
+  private:
+    static
+    const int LIMIT = 25;
+    string lname; // Person’s last name
+    char fname[LIMIT]; // Person’s first name
+    //对于各类函数包括构造函数（析构函数也是，就算他什么都不做），原型解释都放在方法那块写
+  public:
+    Person(); // #1
+    Person(const string & ln,
+    const char * fn = "Heyyou");
+    ~Person();
+    void Show() const;
+    void FormalShow() const;
+};
+
+//方法的展开解释
+Person::Person() {
+  lname = "null";
+  strcpy(fname, "");
+} //char之间涉及数组名以及其他各种指针中的内容复制的，用这个好了
+
+Person::Person(const string & ln, const char * fn){ //带有默认参数的构造函数。 第二个参数不要写成const char * fn = "Heyyou"
+  lname = ln;
+  strcpy(fname, fn);
+} //数组之间不能用等号，或者被const限制的时候，可以试一下strcpy
+
+Person::~Person() {
+  cout << "byebye" << fname << lname << endl;
+}
+
+void Person::Show() const{ // firstname lastname format
+  cout << "this person 's name is :" << fname << " " << lname << endl;
+}
+
+void Person::FormalShow() const{ // lastname, firstname format
+  cout << "this person 's name is :" << lname << " " << fname << endl;
+}
+
+//实现部分
+int main() {
+  cout << "let 's see some person's names': \n";
+  Person liuxiaoming; //调用无参数的默认构造函数，不要用Person liuxiaoming(),否则报错
+  liuxiaoming.Show(); // 先姓后名
+  liuxiaoming.FormalShow(); // 先名后姓
+
+  Person liuxiaoming1("xiaoming"); //调用 带一个默认参数的构造函数
+  liuxiaoming1.Show(); // 先姓后名
+  liuxiaoming1.FormalShow(); // 先名后姓
+
+  Person liuxiaoming2("xiaoming", "liu"); //调用俩个参数的构造函数
+  liuxiaoming2.Show(); // 先姓后名
+  liuxiaoming2.FormalShow(); // 先名后姓
+
+  system("pause");
+  return 0;
+}

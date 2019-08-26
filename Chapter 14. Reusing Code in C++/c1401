@@ -1,0 +1,117 @@
+#include<iostream>
+#include<string>
+#include<valarray>
+#include<stdio.h>
+using namespace std;
+
+//外带的pair模板代码p580-----------------------------------------------------------------------------
+template <class T1, class T2>
+class Pair
+{
+private:
+    T1 a;
+    T2 b;
+public:
+    T1 & first();
+    T2 & second();
+    T1 first() const { return a; }
+    T2 second() const { return b; }
+    Pair( T1 & aval,  T2 & bval) : a(aval), b(bval) { }
+    void set(T1 & aval,  T2 & bval){a=aval;b=bval;}
+    Pair() {}
+};
+template<class T1, class T2>
+T1 & Pair<T1,T2>::first()
+{
+    return a;
+}
+template<class T1, class T2>
+T2 & Pair<T1,T2>::second()
+{
+    return b;
+}
+//----------------------------------------------------------------------------------------------
+typedef std::valarray<int> ArrayInt;
+typedef Pair<ArrayInt, ArrayInt> PairArray;
+class Wine
+{
+private:
+    string label;
+    Pair<ArrayInt, ArrayInt> years;
+    int cout_year;
+public:
+    Wine(){};
+    ~Wine(){};
+    Wine(const char * l, int y, const int yr[], const int bot[]);
+    Wine(const char * l, int y);
+    void GetBottles();
+    string& Label(){return label;};
+    int sum();
+    void Show();
+};
+//**************************************************************************88
+ Wine::Wine(const char * l, int y, const int yr[], const int bot[]):label(l),cout_year(y)
+{
+    valarray<int>nianfen(y);  
+    for(int i=0;i<y;i++){nianfen[i]=yr[i];}
+    valarray<int>pingshu(y);
+    for(int i=0;i<y;i++){pingshu[i]=bot[i];}
+    years.set(nianfen,pingshu);
+}
+Wine::Wine(const char * l, int y):label(l),cout_year(y)
+{
+    valarray<int>nianfen(0,y);
+    valarray<int>pingshu(0,y);
+    years.set(nianfen,pingshu);
+}
+void Wine::GetBottles()
+{
+    cout<<"Enter "<<label<<" data for "<<cout_year<<" year(s):\n";
+    for(int i=0;i<cout_year;i++)
+    {
+        cout<<"Enter year: "; cin>>(years.first())[i];//getchar();cout<<endl;
+        cout<<"Enter bottles for that year: ";cin>>(years.second())[i];getchar();cout<<endl;
+    }
+}
+int Wine::sum()
+{
+    return (years.second()).sum();
+}
+void Wine::Show()
+{
+    cout<<"Wine: "<<label<<endl;
+    cout<<"Year     \t"<<"Bottles     \n";
+    for(int i=0;i<cout_year;i++)
+    {
+        cout<<(years.first())[i]<<"      \t"<<(years.second())[i]<<"        \n";
+    }
+}
+
+//**********************************************************************************************
+
+int main ( void )
+{
+    using std::cin;
+    using std::cout;
+    using std::endl;
+    cout << "Enter name of wine: ";
+    char lab[50];
+    cin.getline(lab, 50);
+    cout << "Enter number of years: ";
+    int yrs;
+    cin >> yrs;
+    Wine holding(lab, yrs); // store label, years, give arrays yrs elements
+    holding.GetBottles(); // solicit input for year, bottle count
+    holding.Show(); // display object contents
+    const int YRS = 3;
+    int y[YRS] = {1993, 1995, 1998};
+    int b[YRS] = { 48, 60, 72};
+    // create new object, initialize using data in arrays y and b
+    Wine more("Gushing Grape Red",YRS, y, b);
+    more.Show();
+    cout << "Total bottles for " << more.Label() // use Label() method
+    << ": " << more.sum() << endl; // use sum() method
+    cout << "Bye\n";
+    return 0;
+}
+

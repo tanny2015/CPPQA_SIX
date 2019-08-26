@@ -1,0 +1,146 @@
+#include < iostream >
+  using namespace std;
+class Stonewt {
+  private:
+    enum {
+      Lbs_per_stn = 14
+    };
+    int stone;
+    double pds_left;
+    double pounds;
+
+  public:
+    Stonewt(double lbs);
+    Stonewt(int stn, double lbs);
+    Stonewt();
+    ~Stonewt();
+    void show_lbs() const;
+    void show_stn() const;
+    operator double() const;
+    friend bool operator == (const Stonewt & k, const Stonewt & t); //别写成等号
+    friend bool operator != (const Stonewt & k, const Stonewt & t);
+    friend bool operator > (const Stonewt & k, const Stonewt & t);
+    friend bool operator >= (const Stonewt & k, const Stonewt & t);
+    friend bool operator < (const Stonewt & k, const Stonewt & t);
+    friend bool operator <= (const Stonewt & k, const Stonewt & t);
+};
+
+#include < iostream >
+  using std::cout;
+
+Stonewt::Stonewt(double lbs) {
+  cout << "double 转类类型转换构造函数被调用. " << endl;
+  stone = int(lbs) / Lbs_per_stn; // integer division
+  pds_left = int(lbs) % Lbs_per_stn + lbs - int(lbs);
+  pounds = lbs;
+}
+
+Stonewt::Stonewt(int stn, double lbs) {
+  stone = stn;
+  pds_left = lbs;
+  pounds = stn * Lbs_per_stn + lbs;
+}
+
+Stonewt::Stonewt() {
+  stone = pounds = pds_left = 0;
+}
+
+Stonewt::~Stonewt() {}
+
+void Stonewt::show_stn() const {
+  cout << stone << " stone, " << pds_left << " pounds\n";
+}
+
+void Stonewt::show_lbs() const {
+  cout << pounds << " pounds\n";
+}
+
+Stonewt::operator double() const //这个是 转换函数--从类对象转换为 一般类型
+{
+  return pounds;
+}
+
+bool operator == (const Stonewt & k, const Stonewt & t) //这里直接使用前边的double（）重载的转换函数
+{
+  if (double(k) == double(t))
+    return true;
+  else
+    return false;
+}
+bool operator != (const Stonewt & k,
+  const Stonewt & t) {
+  if (double(k) != double(t))
+    return true;
+  else
+    return false;
+}
+
+bool operator > (const Stonewt & k, const Stonewt & t) {
+  if (double(k) > double(t))
+    return true;
+  else
+    return false;
+}
+bool operator >= (const Stonewt & k,
+  const Stonewt & t) {
+  if (double(k) >= double(t))
+    return true;
+  else
+    return false;
+}
+
+bool operator < (const Stonewt & k, const Stonewt & t) {
+  if (double(k) < double(t))
+    return true;
+  else
+    return false;
+}
+
+bool operator <= (const Stonewt & k, const Stonewt & t) {
+  if (double(k) <= double(t))
+    return true;
+  else
+    return false;
+}
+
+void display(const Stonewt & st, int n);
+
+int main() {
+  double kk;
+  Stonewt a[6] = {
+    234.3,
+    248.4,
+    109.2
+  }; //这个是使用转换构造函数来构造出来对象
+  for (int i = 3; i < 6; i++) {
+    cout << "please now enter value for Stonewt a[" << i << "]:";
+    cin >> kk; //这边如果用cin>>a[i].pounds，会报错说pounds是个private成员
+    a[i] = kk; //隐式调用转换函数
+  }
+
+  Stonewt aa = a[0];
+  int j = 0;
+  Stonewt bb = a[0];
+  int h = 0;
+  int ii = 0;
+  for (int i = 0; i < 6; i++) {
+    if (aa > a[i]) //找最小值
+    {
+      aa = a[i];
+      j = i;
+    }
+    if (bb < a[i]) //找最大值
+    {
+      bb = a[i];
+      h = i;
+    }
+    if (double(a[i]) >= 11)
+      ii = ii + 1;
+  }
+
+  cout << "pounds最大值是：a[" << h << "]=" << bb << endl <<
+    "pounds最小值是：a[" << j << "]=" << aa << endl <<
+    "类对象中pounds值大于11的数目共有：" << ii << "个." << endl;
+  system("pause");
+  return 0;
+}

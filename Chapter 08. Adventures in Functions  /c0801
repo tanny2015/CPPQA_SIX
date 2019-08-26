@@ -1,0 +1,31 @@
+#include < iostream >
+#include < string >
+  using namespace std;
+void f(string * );
+void f(string * , int);
+int main() {
+  string a = "中国你好！";
+  string b = "我爱中国！";
+
+  //如果函数原型用了指针，而调用的地方本身不是指针也不是数组，就这样直接取地址
+  f( & a, 8); //调用第二个
+  f( & b, 8); //调用第二个
+  f( & a); //调用第一个
+  f( & b); //调用第一个
+
+  system("pause");
+  return 0;
+}
+
+void f(string * p) {
+  cout << * p << endl;
+}
+
+void f(string * p, int n) {
+  static int i = 0; //用一个变量来跟踪全程变化，须用全局变量
+  //为避免混淆，尽量别用i--和i++；
+  i = i + 1;
+  for (int k = 0; k < i; k++) {
+    cout << "第" << k << "次： " << * p << endl;
+  }
+}

@@ -1,0 +1,64 @@
+// compile with the vect.cpp file
+#include < iostream >
+#include < cstdlib > // rand(), srand() 函数原型所在
+#include < ctime > //time()函数原型所在
+#include < fstream >
+  int main() {
+    using namespace std;
+    using VECTOR::Vector;
+
+    ofstream writing;
+    writing.open("output.txt ");
+    writing << fixed;
+    writing.precision(5);
+    writing.setf(ios_base::showpoint);
+
+    srand(time(0)); // time()参数一般为0或者Null相当于 取系统时间()， srand() 随机种，供rand()使用。
+    double direction;
+    Vector step; ////默认都是直角坐标，坐标点在原点(0.0 , 0.0).
+    Vector result(0.0, 0.0);
+    unsigned long steps = 0;
+    double target;
+    double dstep; //每步长度
+    cout << "Enter target distance (q to quit): ";
+    writing << "Enter target distance (q to quit): "; //cout把东西输出到屏幕上，writing是把cout输到屏幕上的东西给写到文件中。
+    while (cin >> target) {
+      cout << "Enter step length: ";
+      writing << "Enter step length: ";
+      if (!(cin >> dstep))
+        break;
+      while (result.magval() < target) {
+        direction = rand() % 360; ////输出1~360中的一个随机值，在while中循环取到该范围内的不同值，srand() 随机种，用一次就行
+        step.reset(dstep, direction, VECTOR::Vector::POL); //reset是全部重新定义了 ;//切换到pol模式  step默认初始值是原点坐标，dstep由用户交互输入，direction是由rand()函数派发。
+        //须用 VECTOR::Vector::POL，单独使用pol会报错
+        result = result + step; //result --默认的是rect直角坐标模式,但是一套构造函数里边已经把所有值给赋值清楚
+        cout << steps << ": " << result << endl; //steps和step不一样
+        writing << steps << ": " << result << endl;
+        steps++;
+      }
+      cout << "After " << steps << " steps, the subject "
+      "has the following location:\n";
+      cout << result << endl;
+      writing << "After " << steps << " steps, the subject "
+      "has the following location:\n";
+      writing << result << endl;
+      result.polar_mode(); //此处似乎出现错误。只是单纯将直角坐标转为极坐标，而原来的直角坐标系的xy没有转成mag和角度ang
+      //--这种理解是错误的，因为上边的构造函数，一套就已经把所有坐标-极坐标和直角坐标给赋值好了
+      cout << " or\n" << result << endl;
+      cout << "Average outward distance per step = " <<
+        result.magval() / steps << endl;
+      writing << " or\n" << result << endl;
+      writing << "Average outward distance per step = " <<
+        result.magval() / steps << endl;
+      steps = 0;
+      result.reset(0.0, 0.0);
+      cout << "Enter target distance (q to quit): ";
+      writing << "Enter target distance (q to quit): ";
+    }
+    cout << "Bye!\n";
+    writing << "Bye!\n";
+    writing.close();
+
+    system("pause");
+    return 0;
+  }

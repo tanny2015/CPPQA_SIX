@@ -1,0 +1,136 @@
+#include < iostream >
+  using namespace std;
+class Stonewt {
+  public:
+    enum Mode {
+      stone1,
+      integer,
+      doubleg
+    }; //这个是状态变量
+
+  private:
+    enum {
+      Lbs_per_stn = 14
+    };
+	  Mode mode;
+	  int stone;
+	  double pds_left;
+	  double pounds;
+	  float s;
+
+  public:
+    Stonewt(double lbs, Mode k = doubleg); // 转换构造函数 --这种转换只能有一个参数，但是如果第二个参数有默认值，那是可以的。 可以用explicit避免显示转换但是隐式转换无法避免
+	  Stonewt(int stn, double lbs); //主选的构造函数
+	  Stonewt();
+	  ~Stonewt();
+	  friend Stonewt operator + (const Stonewt & k, const Stonewt & t);
+	  friend Stonewt operator - (const Stonewt & k, const Stonewt & t);
+	  friend Stonewt operator * (const double k, const Stonewt & t);
+	  friend std::ostream & operator << (std::ostream & os, const Stonewt & t);
+};
+
+//函数原型说明
+Stonewt::Stonewt(double lbs, Mode k) //lbs表示英镑 这个是转换函数，一般类型转为类类型。
+{
+  if (k == integer) //转为整数英镑
+  {
+    pounds = int(lbs);
+    stone = int(lbs) / Lbs_per_stn;
+    pds_left = int(lbs) % Lbs_per_stn + lbs - int(lbs);
+    mode = k; //这个要写，不然后边<<符号重载时，if（mode=??）没有值，所有cout<<输出都乱了
+  }
+
+  if (k == stone1) {
+    pounds = lbs;
+    s = 0.1 * lbs / Lbs_per_stn; //lbs须有小数点才能带出来的s有小数点。因为加减乘全部都是用pounds计算，所以就算没有给stone赋值也不影响运算，程序似乎有问题
+    stone = int(lbs) / Lbs_per_stn; //只有对double值转为类类型才会执行这个。但stone是int，不可能取float值
+    pds_left = 0;
+    mode = k;
+  }
+
+  if (k == doubleg) //转为浮点的英镑
+  {
+    pounds = lbs;
+    stone = int(lbs) / Lbs_per_stn;
+    pds_left = int(lbs) % Lbs_per_stn + lbs - int(lbs);
+    mode = k;
+  }
+}
+
+Stonewt::Stonewt(int stn, double lbs) {
+  stone = stn;
+  pds_left = lbs;
+  pounds = stn * Lbs_per_stn + lbs;
+}
+
+Stonewt::Stonewt() {
+  stone = pounds = pds_left = 0;
+  mode = doubleg; //英镑
+}
+Stonewt::~Stonewt() {
+  cout << "这里被析构！" << endl;
+}
+
+Stonewt operator + (const Stonewt & k, const Stonewt & t) {
+  Stonewt aa;
+  aa.pounds = k.pounds + t.pounds;
+  aa.stone = int(aa.pounds) / Stonewt::Lbs_per_stn;
+  aa.pds_left = int(aa.pounds) % Stonewt::Lbs_per_stn + aa.pounds - int(aa.pounds);
+  return aa;
+}
+
+Stonewt operator - (const Stonewt & k, const Stonewt & t) {
+  Stonewt aa;
+  aa.pounds = k.pounds - t.pounds;
+  if (aa.pounds > 0) {
+    aa.stone = int(aa.pounds) / Stonewt::Lbs_per_stn;
+    aa.pds_left = int(aa.pounds) % Stonewt::Lbs_per_stn + aa.pounds - int(aa.pounds);
+  } else
+    aa.pounds = aa.stone = aa.pds_left = 0;
+  return aa;
+}
+
+Stonewt operator * (const double k, const Stonewt & t) {
+  Stonewt aa;
+  aa.pounds = k * t.pounds;
+  aa.stone = int(aa.pounds) / Stonewt::Lbs_per_stn;
+  aa.pds_left = int(aa.pounds) % Stonewt::Lbs_per_stn + aa.pounds - int(aa.pounds);
+  return aa;
+}
+
+std::ostream & operator << (std::ostream & os, const Stonewt & t) {
+  cout << "print as stone :";
+
+  if (t.mode == Stonewt::stone1)
+    cout << t.s;
+  else if (t.mode == Stonewt::integer || t.mode == Stonewt::doubleg)
+    cout << t.stone;
+
+  cout << " stone, " << t.pds_left << " pounds\n";
+  cout << "print as pounds :";
+  cout << t.pounds << " pounds\n";
+}
+
+int main() {
+  Stonewt incognito = 275; //使用转换函数，默认mode是pounds
+  Stonewt wolfe(285.7, Stonewt::integer); //使用转换函数，默认mode是pounds
+  cout << wolfe << endl;
+  Stonewt wolfe1(285.7, Stonewt::stone1);
+  cout << wolfe1 << endl;
+  Stonewt taft(21, 8); //使用构造函数  默认mode是pounds
+  Stonewt taft1(21, 9);
+  cout << "相加 " << endl;
+  incognito = taft + taft1;
+  cout << incognito << endl;
+
+  cout << "相减 " << endl;
+  incognito = taft1 - taft;
+  cout << incognito << endl;
+
+  cout << "相乘 " << endl;
+  incognito = 3 * taft1;
+  cout << incognito << endl;
+
+  system("pause");
+  return 0;
+}

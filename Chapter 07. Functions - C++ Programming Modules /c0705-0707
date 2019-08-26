@@ -1,0 +1,69 @@
+//7.5-7.7
+#include < iostream >
+  using namespace std;
+const int Max = 5;
+const double * fill_array(double * , int limit);
+void show_array(double *, const double * );
+void revalue(double r, double * , const double * );
+
+int main() {
+  double * properties = new double[Max];
+  const double * pp = fill_array(properties, Max); //虽然 p在自定义函数中被声明为static，但他还不能直接在main函数中使用 .const指针必须赋值给同为const的其他指针，非const指针也可以赋给const指针，就像把他放到密闭容器中封装起来，完全只读不能改。
+  show_array(properties, pp);
+  if (pp > properties) {
+    cout << "Enter revaluation factor: ";
+    double factor;
+    while (!(cin >> factor)) //bad input，如果输入的类型不对的话，可以参考下边的写法， !cin一般和cin.clear()一起使用
+    {
+      cin.clear();
+      while (cin.get() != '\n')
+        continue;
+      cout << "Bad input; Please enter a number: ";
+    }
+    revalue(factor, properties, pp);
+    show_array(properties, pp);
+  }
+  cout << "Done.\n";
+  delete[] properties;
+  //这里就是写了delete pp，也不会报错，但在执行结束之后会报一个sigsegv错误，删了这行delete才正常。pp不是用new建立的，不用管它。
+  system("pause");
+  return 0;
+}
+
+const double * fill_array(double * ar, int limit){ //ar还要被赋值，不可以声明为const
+  using namespace std;
+  static
+  const double * p = ar; //p无法修改ar的内容
+  double temp;
+  for (int i = 0; i < limit; i++) {
+    cout << "Enter value #" << (i + 1) << ": ";
+    cin >> temp;
+    if (!cin) {
+      cin.clear();
+      while (cin.get() != '\n') //只要输入的不是回车号就继续读取，读完了这行就直接告知输入错了，然后退出。
+        continue;
+      cout << "Bad input; input process terminated.\n";
+      break;
+    } else if (temp < 0) // 结束
+      break;
+    ar[i] = temp;
+    if (i > 0)
+      p = p + 1; //p=p+i是错的;不改动他指向的内容，并不意味不能换个地方来指。
+    cout << * p << "的地址是 i=" << p << endl;
+  }
+  return p; //[Error] invalid conversion from 'const double*' to 'double*' 报这个错，要看函数原型的前头返回写的对不对，const double* fill_array（）才对，别漏了const
+}
+
+void show_array(double * ar,const double * n) {
+  using namespace std;
+  int i;
+  for (double * q = ar, i = 0; q < n + 1; q++, i++) {
+    cout << "Property #" << (i + 1) << ": $";
+    cout << * q << endl;
+  }
+}
+
+void revalue(double r, double * ar, const double * n) {
+  for (double * q = ar; q < n + 1; q++) //使用q！=i+1 是错的
+    *q = ( * q) * r; //这个把ar改了，ar让他改了传回去给main。第一个值等于前一个值乘以一个常数r
+}

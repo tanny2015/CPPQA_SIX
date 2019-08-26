@@ -1,0 +1,40 @@
+#include <iterator>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+using namespace std;
+vector<int> lotto(int max_num,int choice_num);
+int main()
+{
+    int whole,choice;
+    cout<<"now enter the whole number of the total digits:";
+    cin>> whole;
+    cout<<"how many digits would you wanna ?";
+    cin>>choice;
+    if(choice>whole)
+    {
+        cout<<"choice should be smaller!"<<endl;
+        cin>>choice;
+    }
+    vector<int> winner = lotto(whole,choice);
+    
+    for(int i=0;i<winner.size();i++)
+    {cout<<winner[i]<<"  " ;};
+    return 0;
+}
+
+vector<int> lotto(int max_num,int choice_num)
+{
+    
+    vector<int> total;
+    for(int i=1;i<=max_num;i++){total.push_back(i);}
+    
+    vector<int> winner_num;
+    for(int i=0;i<choice_num;i++)
+    {
+        random_shuffle(total.begin(),total.end());
+        auto it=total.begin();
+        winner_num.push_back(*it);
+    }
+    return winner_num;
+}

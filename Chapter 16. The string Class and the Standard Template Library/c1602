@@ -1,0 +1,63 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include <algorithm>//remove_if  erase 之类通用算法提供支持
+#include<cctype>//大小写切换提供支持
+using namespace std;
+bool punct(char &n);
+void f(int n);
+bool equ(const char a, const char b);
+string strname;
+int main()
+{
+    
+    cout<<"enter some strings please, stop by entering '#'!";
+    getline(cin,strname,'#');
+    int len0=strname.length();//原始字符串长度
+    // for test
+    cout<<"这个是你输入的字符串"<<strname<<endl;
+    
+    vector <char>strname_copy(len0);
+    for(int i=0;i<len0;i++){strname_copy[i]=strname[i];}
+    
+    strname_copy.erase(remove_if(strname_copy.begin(),strname_copy.end(),punct)  ,strname_copy.end()  );
+    int len=strname_copy.size();
+    cout<<"此时的字符串长度是："<<len<<endl;
+    
+    for(int i=0;i<len;i++){strname[i]='\0';}
+    for(int i=0;i<len;i++){strname[i]=strname_copy[i];}
+    f(len);
+    return 0;
+}
+//判断是否是标点符号
+bool punct(char &n)
+{
+    if(!(n>='0' && n<='9')&& !(n>='A' && n<='Z')  &&  !(n>='a' && n<='z'))
+        return true;
+    else
+        return false;
+}
+void f(int n)
+{
+    int i=0;int ct=0;
+    while (i<=(n-1)/2 )
+    {
+        if(equ(strname[n-1-i],strname[i])){ct++;}
+        i++;
+    }
+    if (ct ==(n-1)/2 + 1)
+    {
+        cout<<"恭喜是回文！"<<endl;return ;
+    }
+    else
+    {
+        cout<<"不是回文哦 "<<endl;return ;
+    }
+}
+bool equ(const char a, const char b)
+{
+    if(tolower(a)==b|| toupper(a)==b)
+        return true;
+    else
+        return false;
+}

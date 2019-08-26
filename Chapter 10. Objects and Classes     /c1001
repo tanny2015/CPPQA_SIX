@@ -1,0 +1,66 @@
+//10.1
+#include < iostream >
+#include < string >
+  using namespace std;
+class account {
+  private:
+    string name;
+    string number;
+    double amount;
+  public:
+    account(); //默认构造函数和构造函数前边不要用void
+    account(const string & nam, string num, double am);
+    ~account();
+    void show_account();
+    void put_in(double aa);
+    void take_out(double aa);
+}; //注意这边有个封号
+
+//方法的展开解释
+account::account(){ //默认构造函数 ---account::这个如果没有写就会报错
+  name = "none";
+  number = "none";
+  amount = 0.0;
+}
+
+account::account(const string & nam, string num, double am){ //（赋值）构造函数
+  name = nam;
+  number = num;
+  if (am < 0) cout << name << "has no money now! \n";
+  else amount = am;
+}
+
+account::~account(){ //析构函数
+  cout << "byebye" << name << endl;
+}
+
+void account::show_account(){ //显示信息，没有参数
+  cout << "now " << name << " 's account is: " << number << " and he owns total money:" <<
+    amount << "RMB.\n";
+}
+
+void account::put_in(double aa){ //存入aa元钱
+  cout << "now we plan to put into the accout " << aa << "rmb money\n";
+  if (aa < 0) cout << "you should not put into negtive amount! \n";
+  else amount += aa; //有变化的private这边改一下，没变化的就不用写
+}
+
+void account::take_out(double aa){ //取出aa元钱
+  cout << "now we plan to take out from the accout " << aa << "rmb money\n";
+  if (aa < 0) cout << "you should not take out negtive amount! \n";
+  else amount -= aa;
+}
+
+//实现部分
+int main() {
+  cout << "let 's see some people's account information now: \n";
+  account xiaoming("xiaoming", "AII12345", 12345); //创建小明的账户给他赋值 --这种赋值不会产生垃圾，因此不调用析构
+  xiaoming = account("xiaoming", "ACSDFERW", 8352); //这个是赋值不是初始化，会创建一个临时变量，此时析构函数被调用清理垃圾
+  xiaoming.show_account(); //显示小明现在的存款
+  xiaoming.put_in(3245.9); //小明存了钱
+  xiaoming.show_account(); //显示小明现在的存款
+  xiaoming.take_out(65.9); //小明取钱
+  xiaoming.show_account(); //显示小明现在的存款
+  system("pause");
+  return 0;
+}

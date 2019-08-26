@@ -1,0 +1,77 @@
+#include < iostream >
+#include < cstring >
+  using namespace std;
+typedef double Item;
+class List {
+  private:
+    enum {
+      max = 3
+    };
+	  Item items[max];
+	  int top;
+
+  public:
+    List();
+	  bool isfull();
+	  bool isempty();
+	  void add(const Item & aa); //这边把const去掉会报错，因为后边main使用的时候是直接提供一个常数double值
+	  void visit(void( * pf)(Item & ));
+	  void show();
+};
+
+//开始函数原型说明
+List::List(){ //满足要求--可以新建一个列表
+  top = 0;
+}
+
+bool List::isfull() {
+  return top == max;
+}
+
+bool List::isempty() {
+  return top == 0;
+}
+
+void List::add(const Item & aa) {
+  if (!isfull()) {
+    items[top++] = aa;
+  } else
+    cout << "the list has been full! \n";
+}
+
+void List::visit(void( * pf)(Item & )){ //函数本身做参数，例如 f1（int i,f(int ii)）这种一般f1函数要实现的是将i放在f（）这个函数中处理
+  for (int i = 0; i < top; i++) {
+    pf(items[i]);
+  }
+}
+
+void List::show() {
+  cout << "we will see the results: \n";
+  for (int i = 0; i < top; i++)
+    cout << "items[" << i << "] = " << items[i] << endl;
+}
+
+//写一个main（）实现
+//用循环来穷尽所有visit要访问的类中的所有成员
+typedef double Item;
+void f(Item & ); //把单个数据加上1
+int main() {
+  List kk;
+  kk.add(12.3);
+  kk.show();
+  kk.add(14.9);
+  kk.show();
+  kk.add(34.0);
+  kk.show();
+  kk.add(37.9);
+  kk.show();
+  kk.visit(f); //这个函数本身做另一个函数的参数，使用的时候只要写函数名放进去就可以。 原型声明的时候用函数指针那种方法
+  kk.show();
+
+  system("pause");
+  return 0;
+}
+
+void f(Item & aa) {
+  aa = aa + 1;
+}

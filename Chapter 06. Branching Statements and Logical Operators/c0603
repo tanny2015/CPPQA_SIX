@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cctype> 
+using namespace std; 
+
+void showmenu();
+char choice;
+int main()
+{
+  showmenu();
+  cin>>choice;
+  while(isalpha(choice))  
+    {
+    	switch(choice)
+    	{
+    		case'c': cout<<"a tiger is a carnivore! \n";
+    		         break;
+    	    case'p': cout<<"beiduofen is a pianist! \n";
+			         break;
+		    case't': cout<<"A maple is a tree. \n";
+			         break;
+			case'g': cout<<"laoyingzhuaxiaoji is a game! \n";
+			         break;
+			default: cout<<"no match answer\n"; 
+			               
+		}
+		showmenu();
+		cin>>choice;
+    }
+    cout<<"wrong type,bye now.\n";
+ 
+   system("pause");
+    return 0; 
+}
+void showmenu()
+{
+	cout<<"please enter one of the following choices:\n"
+          "c) carnivore            p) pianist \n"
+		  "t) tree                 g) game \n"  ; 	 
+}

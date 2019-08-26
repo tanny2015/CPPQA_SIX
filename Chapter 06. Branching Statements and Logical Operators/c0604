@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+void showmenu();
+void case_a();
+void case_b();
+void case_c();
+void prefer();
+const int strsize=30;
+const int m=2;
+struct bop
+{
+    char fullname[strsize];
+    char title[strsize];
+    char bopname[strsize];
+    int preference;
+};
+bop member[m]=
+{
+    {"wang1","dancer","w1",1},
+    {"wang2","teacher","w2",2}
+} ;
+int main()
+{
+    showmenu();
+    char choice;
+    cin>>choice;
+    while(choice!='q'&&choice!='Q')
+    {
+        
+        switch(choice)
+        {
+            case 'a':
+            case 'A':case_a();
+                break;
+            case 'b':
+            case 'B':case_b();
+                break;
+                
+            case 'c':
+            case 'C':case_c();
+                break;
+            case 'd':
+            case 'D':prefer();
+                break;
+                
+            default:cout<<"that is not a choice!\n";
+        }
+        
+        showmenu() ;
+        cin>>choice;
+    }
+    cout<<"your wanna to quit,bye-bye!\n";
+    
+    system("pause");
+    return 0;
+}
+void showmenu()
+{
+    cout<<"please enter one of the following choices:\n"
+    "a. display by name     b. display by title \n"
+		  "c. display by bopname  d. display by preference \n"
+		  "q. quit \n";
+}
+void case_a()
+{
+    for(int i=0;i<2;i++)
+        cout<<member[i].fullname<<endl;
+}
+void case_b()
+{
+    for(int i=0;i<m;i++)
+        cout<<member[i].title<<endl;
+}
+void case_c()
+{
+    for(int i=0;i<m;i++)
+        cout<<member[i].bopname<<endl;
+}
+void prefer()
+{
+    for(int i=0;i<m;i++)
+    {
+        if(member[i].preference==0)
+            cout<<member[i].fullname<<endl;
+        else if(member[i].preference==1)
+            cout<<member[i].title<<endl;
+        else if(member[i].preference==2)
+            cout<<member[i].bopname<<endl;
+    }
+}

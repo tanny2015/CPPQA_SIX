@@ -1,0 +1,143 @@
+#include < iostream >
+  using namespace std;
+namespace SALES {
+  const int q = 4;
+  //结构声明
+  struct Sales {
+    double sales[q];
+    double average;
+    double max;
+    double min;
+  };
+  void setSales(Sales & s,const double arr[], int n);
+  void setSales(Sales & s);
+  void showSales(const Sales & s);
+}
+
+namespace SALES {
+  //非交互版本
+  void setSales(Sales & s,
+    const double arr[], int n){ //s是个结构，其中有个结构元素是double sales[q]
+    double ar[n];
+    for (int i = 0; i < n; i++) {
+      ar[i] = arr[i];
+    } //建个新数组，否则原来的const arr[]动不了
+    int i, j;
+    double sum = 0;
+    int count = 0; //将ar[i]中的前q位最小的数字复制到sales数组中
+    bool aaa;
+    int collect_i;
+    for (int k = 0; k < q; k++) {
+      s.sales[k] = ar[0];
+      aaa = false;
+      for (int i = 1; i < n - count; i++){ //一层k循环下来是必然会找到一个最小值得，所以不论如何count都会加1.sales[k]都会被赋一个当前最小值
+        if (s.sales[k] > ar[i]) {
+          s.sales[k] = ar[i];
+          collect_i = i; //要是没有一个收集此时的标记点i的变量，i会不断加1，直到循环结束，i总是 =(n-count)-1 ,则后边的j=i就是错误的
+          //aaa=true; //bool aaa主要是用来检测是否有在循环中找到合适的值，如果有则才进一步进行对那个值的位置进行重新标记的动作 ，然后后边用if（aaa） 来引导一个for循环。
+          //考虑到 如果if(s.sales[k]>ar[i])一次都没有执行怎么办？ 此时 s.sales[k]=ar[0]已经是最小值了，所以也必须把他算上。 所以把下边的if（aaa）和if（！aaa）合起来写，因为要写的内容是一样的。
+          //这边的collect_i由于程序设计的原因，根本取不到i=0，所以后边有进q行用bool值做补充。
+          aaa = true;
+        }
+      }
+      if (aaa == false){ //别写成赋值的=等号
+        collect_i = 0; //经历就算一次 s.sales[k]>ar[i]，那么aaa的值也会被扭转为true，但是如果 s.sales[k]=ar[0]，这个ar[0]一直就是最小值，那么i没有走上述式子，所以实际上标记的collect_i=0.
+      }
+      for (int j = collect_i; j < n - 1 - count; j++){ //把提取走的那个值的位置开始往前挪一位，将ar[j]覆盖
+        ar[j] = ar[j + 1];
+      }
+      count += 1; //有一种情况是collect_i取到最后一位数，这时已经进不去循环，for(int j=collect_i;j<n-1-count;j++)，因为他后边没有东西替代它，但只要把count加1就能默认下次不比较到他就行了。所以count得放在上边那个循环的外面。
+      sum = sum + s.sales[k]; //求和
+    }
+    //计算平均值、最大最小值
+    s.average = sum / q;
+    double a[q], aa[q];
+    for (i = 0; i < q; i++) {
+      a[i] = s.sales[i];
+    }
+    //for(i=0;i<q;i++){aa[i]=s.sales[i];}//必须声明俩个，不然找最小值的时候已经把a[q]这个数组给改了，所以找最大值得时候已经不是按照原来数组的顺序来找了
+    s.min = s.max = a[0];
+    for (int i = 0; i < q; i++){ //这里i<q-1不可以了
+      if (s.min > a[i])
+        s.min = a[i];
+    }
+    for (int i = 0; i < q; i++) {
+      if (s.max < a[i])
+        s.max = a[i];
+    }
+  }
+
+  //交互版本
+  void setSales(Sales & s) {
+    int j;
+    int i;
+    double sum = 0;
+    cout << "now enter " << q << " sales digits: \n";
+    for (int i = 0; i < q; i++){ //数据输入，收集完成
+      cout << "enter" << i + 1 << " one: " << endl;
+      cin >> s.sales[i];
+      sum += s.sales[i];
+    }
+    //计算平均值、最大最小值
+    s.average = sum / q;
+    double a[q], aa[q];
+    for (i = 0; i < q; i++) {
+      a[i] = s.sales[i];
+    }
+    for (i = 0; i < q; i++) {
+      aa[i] = s.sales[i];
+    }
+    s.min = s.max = a[0];
+    for (int i = 0; i < q - 1; i++) {
+      if (a[i] > a[i + 1])
+        s.min = a[i + 1];
+      else
+        a[i + 1] = s.min;
+    }
+    for (int i = 0; i < q - 1; i++) {
+      if (aa[i] < aa[i + 1])
+        s.max = aa[i + 1];
+      else
+        aa[i + 1] = s.max;
+    }
+    //显示内容
+  }
+  void showSales(const Sales & s) {
+    cout << "the whole sales are as follows:\n";
+    for (int i = 0; i < q; i++) {
+      cout << s.sales[i] << endl;
+    }
+    cout << "the average is :" << s.average << endl;
+    cout << "max is:  " << s.max << endl;
+    cout << "min  is : " << s.min << endl;
+  }
+}
+
+//main实现函数
+int main() {
+  //非交互运用
+  using SALES::Sales;
+  using SALES::setSales;
+  using SALES::showSales; //这三句是必须的
+  Sales xiaoming;
+  double a[10] = {
+    12.3,
+    345.3,
+    456.4,
+    2,
+    78,
+    4,
+    90,
+    34.23,
+    21,
+    23,
+  };
+  setSales(xiaoming, a, 10);
+  showSales(xiaoming);
+
+  //交互运用
+  Sales xiaohua;
+  setSales(xiaohua);
+  showSales(xiaohua);
+  system("pause");
+}

@@ -1,0 +1,145 @@
+#include < iostream >
+  using namespace std;
+namespace SALES {
+  const int q = 4;
+  //结构声明
+  class Sales {
+    private:
+      double sales[q];
+    double average;
+    double max;
+    double min;
+    public:
+      //Sales();
+      Sales();
+    Sales(const double arr[], int n); //注意到和结构的区别，结构这边会声明为Sales(Sales &s,const double arr[],int n);然后结构所属成员就用s.max之类的，但是类对象是直接把这些函数标上类名所属Sales::Sales（），这样直接在main（）实现中（而不是像结构对象那样，将其用在函数解释中）用类名Sales.min来调用
+
+    ~Sales();
+    void showSales();
+  }; //和结构声明一样，这儿得有个封号
+}
+
+namespace SALES {
+  //非交互版本
+  Sales::Sales(const double arr[], int n) // 注意和结构的区别，在函数解释这块，凡是原来结构中有s.max之类的，在类中，都直接把（s.）这个去掉
+  {
+    double ar[n];
+    for (int i = 0; i < n; i++) {
+      ar[i] = arr[i];
+    } //建个新数组，否则原来的const arr[]动不了
+    int i, j;
+    double sum = 0;
+    int count = 0; //将ar[i]中的前q位最小的数字复制到sales数组中
+    bool aaa;
+    int collect_i;
+    for (int k = 0; k < q; k++) {
+      sales[k] = ar[0];
+      aaa = false;
+      for (int i = 1; i < n - count; i++) //一层k循环下来是必然会找到一个最小值，不论如何count都会加1. sales[k]都会被赋一个当前最小值
+      {
+        if (sales[k] > ar[i]) {
+          sales[k] = ar[i];
+          collect_i = i;
+          aaa = true;
+        }
+      }
+      if (aaa == false) {
+        collect_i = 0;
+      }
+      for (int j = collect_i; j < n - 1 - count; j++) {
+        ar[j] = ar[j + 1];
+      }
+      count += 1;
+      sum = sum + sales[k]; //求和
+    }
+    //计算平均值、最大最小值
+    average = sum / q;
+    double a[q], aa[q];
+    for (i = 0; i < q; i++) {
+      a[i] = sales[i];
+    }
+    //for(i=0;i<q;i++){aa[i]=s.sales[i];}
+    min = max = a[0];
+    for (int i = 0; i < q; i++) {
+      if (min > a[i])
+        min = a[i];
+    }
+    for (int i = 0; i < q; i++) {
+      if (max < a[i])
+        max = a[i];
+    }
+  }
+
+  //交互版本
+  Sales::Sales() {
+    int j;
+    int i;
+    double sum = 0;
+    cout << "now enter " << q << " sales digits: \n";
+    for (int i = 0; i < q; i++) //数据输入，收集完成
+    {
+      cout << "enter" << i + 1 << " one: " << endl;
+      cin >> sales[i];
+      sum += sales[i];
+    }
+    //计算平均值、最大最小值
+    average = sum / q;
+    double a[q], aa[q];
+    for (i = 0; i < q; i++) {
+      a[i] = sales[i];
+    }
+    for (i = 0; i < q; i++) {
+      aa[i] = sales[i];
+    }
+    min = max = a[0];
+    for (int i = 0; i < q - 1; i++) //---i<q-1;
+    {
+      if (a[i] > a[i + 1])
+        min = a[i + 1];
+      else
+        a[i + 1] = min;
+    }
+    for (int i = 0; i < q - 1; i++) {
+      if (aa[i] < aa[i + 1])
+        max = aa[i + 1];
+      else
+        aa[i + 1] = max;
+    }
+    //显示内容
+  }
+
+  Sales::~Sales() {}
+  void Sales::showSales() {
+    cout << "the whole sales are as follows:\n";
+    for (int i = 0; i < q; i++) {
+      cout << sales[i] << endl;
+    }
+    cout << "the average is :" << average << endl;
+    cout << "max is:  " << max << endl;
+    cout << "min  is : " << min << endl;
+  }
+}
+
+//main实现函数
+int main() {
+  using SALES::Sales; //必须有这行
+  //交互运用
+  Sales xiaoming; //这个使用没有参数的那个默认构造函数。
+  xiaoming.showSales();
+  //非交互运用
+  double a[10] = {
+    12.3,
+    345.3,
+    456.4,
+    2,
+    78,
+    4,
+    90,
+    34.23,
+    21,
+    23,
+  };
+  Sales xiaohua(a, 10);
+  xiaohua.showSales();
+  system("pause");
+}
